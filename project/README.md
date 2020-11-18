@@ -6,7 +6,6 @@ The application was bootstraped using [Create React App](https://reactjs.org/doc
 
 - [React Router](https://github.com/ReactTraining/react-router) - for client-side (browser) routing
 - [axios](https://github.com/axios/axios) - for HTTP requests
-- [React Query](https://react-query.tanstack.com/) - for HTTP requests and state management
 - any UI library such as [Ant Design](https://ant.design/), [reactstrap](https://reactstrap.github.io/) or [Material UI](https://material-ui.com/)
 - any other global state management tool such as [ContextAPI](https://reactjs.org/docs/context.html), [Redux](https://redux.js.org/) or [MobX](https://mobx.js.org/).
 
@@ -59,20 +58,10 @@ The course details page must contain:
 
 1. all the details of the course
 2. all the course instructors
-3. an edit button that will edit the current course (edit the course inline or in another page)
-4. a delete button that will delete the current course
 
 #### Courses Details Page (sample)
 
 ![Courses Details Page](public/course-details-page.png)
-
-#### Edit Details (sample)
-
-![Edit Details](public/edit-course.png)
-
-#### Delete Course (sample)
-
-![Delete Course](public/delete-course.png)
 
 ### Add new course page
 
@@ -84,3 +73,7 @@ The add new course page must contain:
 #### Add new course page (sample)
 
 ![Add new course page](public/add-new-course.png)
+
+### Extras / Bonus
+
+- Add client-side validations
