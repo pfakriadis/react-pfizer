@@ -841,30 +841,6 @@ const Form = () => {
 
 ---
 
-# Mini project: ToDo list
-
-Part 1: create the presentational elements (workshop/todo-app/00.html)
-
----
-
-# Mini project: ToDo list
-
-Part 2: create the add todo functionality (workshop/todo-app/01.html)
-
----
-
-# Mini project: ToDo list
-
-Part 3: create the toggle todo functionality (workshop/todo-app/02.html)
-
----
-
-# Mini project: ToDo list
-
-Part 4: create the delete todo functionality (workshop/todo-app/03.html)
-
----
-
 # Styling and CSS
 
 - CSS classes
