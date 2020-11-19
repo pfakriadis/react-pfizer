@@ -1,0 +1,6 @@
+create two inpus text username and password with valiations.
+username should not be empty
+password should be at least 6 chars and include char '!'
+
+Prerequisites:
+Use ref for values of username and password
