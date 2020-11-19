@@ -13,7 +13,7 @@ theme: uncover
 
 # Agenda
 
-All the content can be found [here](https://github.com/codehub-learn/PF-ReGen-React).
+All the content can be found [here](https://github.com/codehub-learn/react-pfizer).
 
 - FP concepts
 - redux principles
@@ -22,7 +22,6 @@ All the content can be found [here](https://github.com/codehub-learn/PF-ReGen-Re
 - reducers
 - middleware
 - selectors
-- sagas
 
 ---
 

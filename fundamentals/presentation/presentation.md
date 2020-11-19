@@ -13,7 +13,7 @@ theme: uncover
 
 # Agenda
 
-All the content can be found [here](https://github.com/codehub-learn/PF-ReGen-React).
+All the content can be found [here](https://github.com/codehub-learn/react-pfizer).
 
 - what is react
 - core principles
