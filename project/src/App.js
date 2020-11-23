@@ -1,8 +1,19 @@
+import {ThemeProvider as MuiThemeProvider} from "@material-ui/styles";
+import {createMuiTheme} from "@material-ui/core";
+import defaultTheme from "./common/theme";
+import Layout from "./layout/Layout";
+import React from "react";
+import {BrowserRouter as Router} from "react-router-dom";
+
 function App() {
   return (
-    <div className="App">
-      <h1>Codehub React App</h1>
-    </div>
+      <>
+          <Router>
+              <MuiThemeProvider theme={createMuiTheme(defaultTheme)}>
+                  <Layout />
+              </MuiThemeProvider>
+          </Router>
+      </>
   );
 }
 
