@@ -5,6 +5,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Dashboard from "../components/Dashboard";
 import CoursesPage from "../components/CoursesPage";
 import CourseDetailsPage from "../components/CourseDetailsPage";
+import AddNewCourse from "../components/AddNewCourse";
 
 const useStyles = makeStyles({
     main: {
@@ -31,6 +32,12 @@ function Main() {
                         exact
                         path={ROUTES.COURSES}
                         component={CoursesPage}
+                    />
+
+                    <Route
+                        exact
+                        path={ROUTES.ADD_NEW_COURSE}
+                        component={AddNewCourse}
                     />
 
                     <Route
