@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles((theme) => ({
     root1: {
         width: 319,
-        // height: 542,
+        height: 600,
         // height: "100%",
         marginTop: theme.spacing(2)
     },
@@ -78,7 +78,7 @@ CourseCard.defaultProps = {
 
 CourseCard.propTypes = {
     title: PropTypes.string,
-    description: PropTypes.object,
+    description: PropTypes.any,
     image: PropTypes.string,
     handleClick: PropTypes.func
 };

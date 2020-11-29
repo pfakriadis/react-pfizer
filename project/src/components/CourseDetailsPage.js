@@ -1,19 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {useCourses} from "../hooks/useCourses";
-import {COURSE_DETAILS} from "../common/routes";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import CourseCard from "./CourseCard";
 import {useCourse} from "../hooks/useCourse";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import {useInstructor} from "../hooks/useInstructor";
-import {
-    useHistory,
-    useParams
-} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import DeleteDialog from "./DeleteDialog";
+import CheckIcon from "@material-ui/icons/Check";
 
 function CourseDetailsPage() {
 
@@ -74,7 +69,7 @@ function CourseDetailsPage() {
                     item
                     lg={12}
                 >
-                    <img src={courseT?.imagePath} height={225} width={"100%"}/>
+                    <img src={courseT?.imagePath || "/notAvailable.png"} height={225} width={"100%"}/>
                 </Grid>
 
                 <Grid
@@ -99,10 +94,10 @@ function CourseDetailsPage() {
                         lg={6}
                     >
                         <Typography variant={"h4"}>
-                            {"Price: " + courseT?.price?.normal + " €"}
+                            {"Price: "} {courseT?.price?.normal && courseT?.price?.normal + " €"}
                         </Typography><br/>
                         <Typography variant={"h4"}>
-                            {"Bookable: " + courseT?.price?.normal + " €"}
+                            {"Bookable: "} {courseT?.open && (<CheckIcon size={"large"} style={{color: "green"}}/>)}
                         </Typography>
 
 
@@ -114,10 +109,10 @@ function CourseDetailsPage() {
                         align={"right"}
                     >
                         <Typography variant={"h4"}>
-                            {"Price: " + courseT?.price?.normal + " €"}
+                            {"Duration: "} {courseT?.duration && courseT?.duration}
                         </Typography><br/>
                         <Typography variant={"h4"}>
-                            {"Bookable: " + courseT?.price?.normal + " €"}
+                            {"Dates: "} {courseT?.dates?.start_date && courseT?.dates?.end_date && courseT?.dates?.start_date.replaceAll("-", "/") + " - " + courseT?.dates?.end_date.replaceAll("-", "/")}
                         </Typography>
 
                     </Grid>

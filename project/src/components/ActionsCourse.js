@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function AddNewCourse() {
+function ActionsCourse() {
     const classes = useStyles();
 
     const {loadInstructors, instructors} = useInstructors();
@@ -50,16 +50,11 @@ function AddNewCourse() {
 
 
     useEffect(() => {
-        // if (action === "add") {
-            loadInstructors();
-            loadCourses();
-        // }
+        loadInstructors();
+        loadCourses();
     },[]);
 
     useEffect(() => {
-        console.log(location?.pathname); // result: '/secondpage'
-        console.log(location?.search); // result: '?query=abc'
-        console.log(location?.state); // result: 'some_value'
         if (action === "edit") {
             setNewCourse(location.state.course);
             setStateOpen(!location.state.course.open);
@@ -116,7 +111,6 @@ function AddNewCourse() {
     const  handleChangeCheckBox = (name, checked) => {
         let newCourseUpdated = {...newCourse};
         let stateUpdated = {...stateOpen};
-        console.log(state);
 
         if (checked) {
             newCourseUpdated.open = false;
@@ -159,6 +153,14 @@ function AddNewCourse() {
                     container
                     direction={"row"}
                 >
+                    <Grid
+                        item
+                        lg={12}
+                    >
+                        <Typography variant={"h3"}>
+                            {action === "add" ? "Add Course" : "Edit Course"}
+                        </Typography>
+                    </Grid>
                     <Grid
                         item
                         lg={12}
@@ -360,4 +362,4 @@ function AddNewCourse() {
 
 }
 
-export default AddNewCourse;
+export default ActionsCourse;
