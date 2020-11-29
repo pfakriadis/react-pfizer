@@ -35,18 +35,19 @@ function Header() {
                 >
                     <Toolbar
                         className={classes.toolBar}
+                        style={{background: "black"}}
                     >
                         <Typography>
-                            <Link href={ROUTES.DASHBOARD} color="inherit">
+                            <Link href={ROUTES.DASHBOARD} color="inherit" style={{textDecoration: "none"}}>
                                 Code.Hub Dashboard
                             </Link>
                         </Typography>
                         <div className={classes.root}>
                             <Typography>
-                                <Link href={ROUTES.ADD_NEW_COURSE} color="inherit" style={{float: "right"}}>
+                                <Link href={"/add"} color="inherit" style={{float: "right", textDecoration: "none", color: "darkgray"}}>
                                     Add New Course
                                 </Link>
-                                <Link href={ROUTES.COURSES} color="inherit" style={{float: "right", marginRight: 15}}>
+                                <Link href={ROUTES.COURSES} color="inherit" style={{float: "right", marginRight: 15, textDecoration: "none", color: "darkgray"}}>
                                     Courses
                                 </Link>
                             </Typography>

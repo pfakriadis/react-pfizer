@@ -36,7 +36,7 @@ function Main() {
 
                     <Route
                         exact
-                        path={ROUTES.ADD_NEW_COURSE}
+                        path={"/:action"}
                         component={AddNewCourse}
                     />
 

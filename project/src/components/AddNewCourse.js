@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import {useCourses} from "../hooks/useCourses";
 import {useInstructors} from "../hooks/useInstructors";
 import {useCourse} from "../hooks/useCourse";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -20,39 +21,65 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
     },
+    margin: {
+        marginTop: 8,
+        marginBottom: 8
+    }
 }));
 
 function AddNewCourse() {
     const classes = useStyles();
 
     const {loadInstructors, instructors} = useInstructors();
-    const {addCourse} = useCourse();
+    const {addCourse, editCourse} = useCourse();
     const {loadCourses, courses} = useCourses();
+    let { action } = useParams();
+
+    const location = useLocation();
+    let history = useHistory();
+
+
 
 
     const [state, setState] = useState({});
+    const [stateOpen, setStateOpen] = useState(false);
+
     const [instructorsSelected, setInstructorsSelected] = useState([]);
     const [newCourse, setNewCourse] = useState({id: "", title: "", imagePath: "", price: {normal: "", early_bird: ""},
-        dates: {start_date: "", end_date: ""}, duration: "", open: false, instructors: [], description: ""});
+        dates: {start_date: "", end_date: ""}, duration: "", open: true, instructors: [], description: ""});
 
 
     useEffect(() => {
-        loadInstructors();
-        loadCourses();
+        // if (action === "add") {
+            loadInstructors();
+            loadCourses();
+        // }
     },[]);
 
     useEffect(() => {
-        if (instructors.length > 0) {
-            let checkedUpdated = {...state};
-            instructors.forEach(instructor => {
-                checkedUpdated[instructor.id] = false;
-            });
-            setState(checkedUpdated);
+        console.log(location?.pathname); // result: '/secondpage'
+        console.log(location?.search); // result: '?query=abc'
+        console.log(location?.state); // result: 'some_value'
+        if (action === "edit") {
+            setNewCourse(location.state.course);
+            setStateOpen(!location.state.course.open);
         }
+    }, [location]);
+
+    useEffect(() => {
+        let checkedUpdated = {...state};
+
+        if (instructors.length > 0) {
+            instructors.forEach(instructor => {
+                checkedUpdated[instructor.id] = action === "add" && false;
+            });
+        }
+        action === "edit" && location.state.course?.instructors.forEach(instructorId => checkedUpdated[instructorId] = true);
+        setState(checkedUpdated);
     },[instructors]);
 
     useEffect(() => {
-        if (courses.length > 0) {
+        if (courses.length > 0 && action === "add") {
             let newCourseUpdated = {...newCourse};
             let id = 0;
             courses.forEach(course => {
@@ -88,19 +115,20 @@ function AddNewCourse() {
 
     const  handleChangeCheckBox = (name, checked) => {
         let newCourseUpdated = {...newCourse};
-        let stateUpdated = {...state};
+        let stateUpdated = {...stateOpen};
+        console.log(state);
 
         if (checked) {
             newCourseUpdated.open = false;
-            stateUpdated[name] = true;
+            stateUpdated = true;
         }
         else {
             newCourseUpdated.open = true;
-            stateUpdated[name] = false;
+            stateUpdated = false;
         }
 
         setNewCourse(newCourseUpdated);
-        setState(stateUpdated);
+        setStateOpen(stateUpdated);
     };
 
     const  handleChangeTextField = (name, value) => {
@@ -119,8 +147,9 @@ function AddNewCourse() {
         setNewCourse(newCourseUpdated);
     };
 
-    const  handleOnClick = () => {
-        addCourse(newCourse);
+    const  handleOnClick = async () => {
+        action === "add" ? await addCourse(newCourse) : await editCourse(newCourse);
+        history.goBack();
     };
 
     return (
@@ -136,7 +165,7 @@ function AddNewCourse() {
                     >
                         <Typography>Title:</Typography>
                         <TextField
-                            fullWidth size={"small"} id="standard-basic" label="Standard" variant="outlined" name={"title"}
+                            fullWidth size={"small"} id="standard-basic" variant="outlined" name={"title"} value={newCourse?.title} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
                     </Grid>
@@ -147,7 +176,7 @@ function AddNewCourse() {
                     >
                         <Typography>Duration:</Typography>
                         <TextField
-                            fullWidth size={"small"} id="standard-basic" label="Standard" variant="outlined" name={"duration"}
+                            fullWidth size={"small"} id="standard-basic" variant="outlined" name={"duration"} value={newCourse?.duration} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
                     </Grid>
@@ -158,20 +187,21 @@ function AddNewCourse() {
                     >
                         <Typography>Image Path:</Typography>
                         <TextField
-                            fullWidth size={"small"} id="standard-basic" label="Standard" variant="outlined" name={"imagePath"}
+                            fullWidth size={"small"} id="standard-basic" variant="outlined" name={"imagePath"} value={newCourse?.imagePath} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
 
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={state["open"]}
+                                    checked={stateOpen}
                                     onChange={(event) => handleChangeCheckBox(event.target.name, event.target.checked)}
                                     name="open"
                                     color="primary"
                                 />
                             }
                             label="Booked"
+                            className={classes.margin}
                         />
                         <Box
                             pt={3}
@@ -197,11 +227,13 @@ function AddNewCourse() {
                                     <Checkbox
                                         color="primary"
                                         name={instructor?.id}
+                                        value={state[instructor?.id]}
                                         checked={state[instructor?.id]}
                                         onChange={(event) => handleChangeCheckBoxInstructor(event.target.name, event.target.checked)}
                                     />
                                 }
                                 label={instructor?.name?.first + " " + instructor?.name?.last}
+                                className={classes.margin}
                             />
                             </Grid>
                         ))}
@@ -219,7 +251,7 @@ function AddNewCourse() {
                     >
                         <Typography>Description:</Typography>
                         <TextField
-                            fullWidth multiline size={"small"} rows={4} id="standard-basic" label="Standard" variant="outlined" name={"description"}
+                            fullWidth multiline size={"small"} rows={4} id="standard-basic" variant="outlined" name={"description"} value={newCourse?.description} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
 
@@ -244,6 +276,7 @@ function AddNewCourse() {
                             // label="Birthday"
                             type="date"
                             name={"start_date"}
+                            value={newCourse?.dates?.start_date}
                             fullWidth
                             size={"small"}
                             defaultValue="2017-05-24"
@@ -253,6 +286,7 @@ function AddNewCourse() {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            className={classes.margin}
                         />
                         <Typography>End Date:</Typography>
                         <TextField
@@ -262,6 +296,7 @@ function AddNewCourse() {
                             name={"end_date"}
                             fullWidth
                             size={"small"}
+                            value={newCourse?.dates?.end_date}
                             defaultValue="2017-05-24"
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                             // className={classes.textField}
@@ -269,6 +304,7 @@ function AddNewCourse() {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            className={classes.margin}
                         />
 
                         <Box
@@ -289,13 +325,13 @@ function AddNewCourse() {
 
                         <Typography>Early Bird:</Typography>
                         <TextField
-                            fullWidth size={"small"} type="number" id="standard-basic" label="Standard" variant="outlined" name={"early_bird"}
+                            fullWidth size={"small"} type="number" id="standard-basic" variant="outlined" name={"early_bird"} value={newCourse?.price?.early_bird} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
 
                         <Typography>Normal price:</Typography>
                         <TextField
-                            fullWidth size={"small"} type="number" id="standard-basic" label="Standard" variant="outlined" name={"normal"}
+                            fullWidth size={"small"} type="number" id="standard-basic" variant="outlined" name={"normal"} value={newCourse?.price?.normal} className={classes.margin}
                             onChange={(event) => handleChangeTextField(event.target.name, event.target.value)}
                         />
 
@@ -313,7 +349,7 @@ function AddNewCourse() {
                         align={"right"}
                     >
                         <Button variant={"contained"} color="primary" onClick={handleOnClick}>
-                            Add Course
+                            {action === "add" ? "Add Course" : "Edit Course"}
                         </Button>
                     </Grid>
                 </Grid>

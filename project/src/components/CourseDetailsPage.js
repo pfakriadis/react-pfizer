@@ -9,15 +9,21 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import {useInstructor} from "../hooks/useInstructor";
 import {
+    useHistory,
     useParams
 } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import DeleteDialog from "./DeleteDialog";
 
 function CourseDetailsPage() {
 
-    const {loadCourse, courseT} = useCourse();
+    const {loadCourse, courseT, deleteCourse} = useCourse();
     const {loadInstructor, instructor} = useInstructor();
     let { course } = useParams();
+    let history = useHistory();
     const [instructors, setInstructors] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+
 
     useEffect(() => {
         loadCourse(course);
@@ -36,8 +42,18 @@ function CourseDetailsPage() {
 
     },[instructor]);
 
-    const handleClickView = (id) => {
-        // navigate(COURSE_DETAILS + "/" + id);
+    const handleEdit = () => {
+        history.push("/edit", {course: courseT});
+    };
+
+    const handleDeleteConfirm = () => {
+        setOpenDialog(true);
+    };
+
+    const handleDelete = async () => {
+        setOpenDialog(false);
+        await deleteCourse(courseT);
+        history.goBack();
     };
 
     return (
@@ -118,6 +134,19 @@ function CourseDetailsPage() {
                     item
                     lg={12}
                 >
+                    <Button variant={"outlined"} onClick={handleEdit} style={{marginRight: 10, background: "blue", color: "white"}}>
+                        Edit
+                    </Button>
+
+                    <Button variant={"outlined"} onClick={handleDeleteConfirm} style={{background: "red", color: "white"}}>
+                        Delete
+                    </Button>
+                </Grid>
+
+                <Grid
+                    item
+                    lg={12}
+                >
                     <Typography variant={"h2"}>
                         Instructors
                     </Typography>
@@ -140,19 +169,7 @@ function CourseDetailsPage() {
                         <Typography>{instructor?.bio}</Typography>
                     </Grid>
                 ))}
-                {/*{courseT && (
-                    <Grid
-                        item
-                        lg={3}
-                        style={{maxWidth: 360}}
-                    >
-                        <CourseCard
-                            title={courseT.title}
-                            image={window.location.origin +  courseT.imagePath}
-                            handleClick={() => handleClickView(courseT.id)}
-                        />
-                    </Grid>
-                )}*/}
+                <DeleteDialog open={openDialog} handleDelete={handleDelete} title={courseT?.title}/>
             </Grid>
         </>
     );
